@@ -1,3 +1,5 @@
+import colors from "./colors.js"
+
 const lines = JSON.parse(await Deno.readTextFile("./src/load/lines.json"))
 const source = JSON.parse(await Deno.readTextFile("./src/edit/edited.json"))
 const basic = JSON.parse(await Deno.readTextFile("./src/default.json"))
@@ -16,8 +18,8 @@ basic.lines.push(...source.map(([lName, stations], i) => (
         css: (lines[i][0].length == 1)
             ? "subway-line"
             : "subway-line-long",
-        color_bg: "#0039A6",
-        color_text: "#FFFFFF",
+        color_bg: colors[lines[i][0]][0],
+        color_text: colors[lines[i][0]][1],
         stations: stations.map(x => x[6]),
         draw_map: stations.map(x => x[6]),
         id: 97 + i,
