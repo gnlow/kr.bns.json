@@ -1,5 +1,4 @@
 const lines = require("./lines.js")
-console.log(lines)
 
 const pptr = require("puppeteer")
 const { writeFile } = require("fs").promises;
@@ -11,6 +10,8 @@ const { writeFile } = require("fs").promises;
     let allStations = []
 
     for (const [name, id, start, end] of lines) {
+        console.log(`Loading...: ${name}`)
+
         await page.goto(`https://rail.blue/railroad/logis/line.aspx?id=${id}`, { waitUntil: "networkidle2" })
         const stations = await page.evaluate(
             () => _map_station.filter(
@@ -24,9 +25,14 @@ const { writeFile } = require("fs").promises;
             )
         )
         allStations.push(...stations)
+        allStations = allStations.splice(
+            allStations.findIndex(x => x[1] == start),
+            allStations.findIndex(x => x[1] == end) + 1,
+        )
     }
 
     await browser.close()
 
+    console.log("Writing file...: data.json")
     await writeFile("./data.json", JSON.stringify(allStations))
 })();
