@@ -13,8 +13,8 @@ source.forEach(([lName, stations]) => {
 
 basic.lines.push(...source.map(([lName, stations], i) => (
     {
-        name: `${lines[i][0]}_${lines[i][1]}`,
-        html: lines[i][0],
+        name: `${lines[i][0]}_${lines[i][1]}`, // 인게임에서는 씹힘
+        html: ` ${lines[i][0]} `,
         css: (lines[i][0].length == 1)
             ? "subway-line"
             : "subway-line-long",
