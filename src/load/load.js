@@ -1,4 +1,4 @@
-const lines = require("./lines.js")
+const lines = require("./lines.json")
 
 const pptr = require("puppeteer")
 const { writeFile } = require("fs").promises;
