@@ -9,11 +9,11 @@ const { writeFile } = require("fs").promises;
 
     let allStations = []
 
-    for (const [name, id, start, end] of lines) {
+    for (const [line, name, id, start, end] of lines) {
         console.log(`Loading...: ${name}`)
 
         await page.goto(`https://rail.blue/railroad/logis/line.aspx?id=${id}`, { waitUntil: "networkidle2" })
-        const stations = await page.evaluate(
+        let stations = await page.evaluate(
             () => _map_station.filter(
                 ([sId, sName, type, lat, long]) => {
                     return ![
@@ -24,11 +24,13 @@ const { writeFile } = require("fs").promises;
                 }
             )
         )
-        allStations.push(...stations)
-        allStations = allStations.splice(
-            allStations.findIndex(x => x[1] == start),
-            allStations.findIndex(x => x[1] == end) + 1,
-        )
+        if (start && end) {
+            stations = stations.splice(
+                stations.findIndex(x => x[1] == start),
+                stations.findIndex(x => x[1] == end) + 1,
+            )
+        }
+        allStations.push([name, stations])
     }
 
     await browser.close()
